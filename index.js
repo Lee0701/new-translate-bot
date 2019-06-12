@@ -24,7 +24,10 @@ bot.command('atr', (ctx) => {
     const args = (ctx.update.message.text || '').split(/\s+/).slice(1)
     if(args.length >= 1) {
         if(args[0] == 'reload') {
-
+            ctx.getChat().then(chat => {
+                groups[chat.id] = parseConfig(chat.description)
+                ctx.reply('Reloaded config.')
+            })
         }
     }
 })
@@ -78,8 +81,10 @@ const translate = (msg, callback) => {
     })
 }
 
+const formatName = (from) => from.first_name + (from.last_name ? ' ' + from.last_name : '')
+
 const formatMessage = (msg, messages) => {
-    return msg.from.username + ': ' + messages.filter((entry) => entry[1] != '').map(entry => emojiFlags.countryCode(entry[0].split('_')[1]).emoji + ' ' + entry[1]).join(' ')
+    return formatName(msg.from) + ': ' + messages.filter((entry) => entry[1] != '').map(entry => emojiFlags.countryCode(entry[0].split('_')[1]).emoji + ' ' + entry[1]).join(' ')
 }
   
 const sendTranslatedMessage = (ctx, translated) => {
