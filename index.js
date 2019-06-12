@@ -44,8 +44,16 @@ bot.on('text', (ctx) => {
     } else {
         translate(msg, callback)
     }
-    
+})
 
+bot.on('edited_message', (ctx) => {
+    const msg = ctx.editedMessage
+    const key = getHistoryKey(msg)
+    if(history[key]) {
+        translate(msg, (result) => {
+            bot.telegram.editMessageText(msg.chat.id, history[key], null, result)
+        })
+    }
 })
 
 bot.catch((err) => console.error(err))
