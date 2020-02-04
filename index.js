@@ -60,8 +60,13 @@ bot.on('edited_message', (ctx) => {
 })
 
 bot.catch((err) => console.error(err))
-
 bot.launch()
+
+http.createServer((req, res) => {
+    res.writeHead(200, {'Content-Type': 'text/plain'})
+    res.write('')
+    res.end()
+}).listen(process.env.PORT || 3000)
 
 const parseConfig = (configText) => (configText || '').split('\n').filter((line) => line.startsWith('@tr ')).map((line) => line.slice(4).split(' '))
 
